@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>The $isty $isters — $ylviya VS $ydney</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#160b35;color:#fff;font-family:Arial,Helvetica,sans-serif;overflow:hidden}
+#game{position:relative;width:100vw;height:100vh;background:linear-gradient(#72d9ff 0%,#bcecff 55%,#8bd4a0 100%);overflow:hidden}
+#stars{position:absolute;inset:0;pointer-events:none;background-image:
+ radial-gradient(circle,#fff 1px,transparent 2px),
+ radial-gradient(circle,#ff72c8 1px,transparent 2px);
+background-size:90px 90px,130px 130px;background-position:10px 20px,50px 70px;opacity:.55}
+#mountain{position:absolute;left:50%;bottom:-8vh;transform:translateX(-50%);
+width:72vw;height:82vh;background:linear-gradient(115deg,#53627c,#7786a1 48%,#46546f);
+clip-path:polygon(50% 0,100% 100%,0 100%);filter:drop-shadow(0 0 25px #4a4a80)}
+#mountain:after{content:"";position:absolute;left:50%;top:8%;width:18%;height:92%;transform:translateX(-50%);
+background:linear-gradient(90deg,transparent,#9ba9c0aa,transparent);clip-path:polygon(50% 0,100% 100%,0 100%)}
+.cloud{position:absolute;background:#fff;border-radius:50px;width:180px;height:45px;opacity:.75}
+.cloud:before,.cloud:after{content:"";position:absolute;background:#fff;border-radius:50%}
+.cloud:before{width:65px;height:65px;left:30px;bottom:10px}.cloud:after{width:80px;height:80px;right:25px;bottom:5px}
+.c1{left:5%;top:20%}.c2{right:8%;top:29%;transform:scale(.8)}
+#hud{position:absolute;top:12px;left:50%;transform:translateX(-50%);width:min(850px,94vw);
+display:flex;justify-content:space-between;align-items:center;z-index:20}
+.title{font-weight:900;font-size:clamp(18px,3vw,34px);text-shadow:3px 3px #6d176e,-1px -1px #fff;letter-spacing:1px}
+.badge{background:#ff5ca8;border:3px solid #fff;border-radius:16px;padding:8px 13px;font-weight:900;box-shadow:0 4px 0 #8b2a72}
+#course{position:absolute;inset:0;z-index:5}
+.platform{position:absolute;height:22px;border-radius:7px;border:3px solid #fff;box-shadow:0 4px 0 #6c397e,0 0 12px #ff7bd0;
+background:#e958bc}
+.platform.alt{background:#ff9b37}.platform.blue{background:#5ee7ff}.platform.green{background:#62e08c}
+.obstacle{position:absolute;z-index:8;pointer-events:none}.flag{font-size:30px;filter:drop-shadow(0 2px 2px #7b3277)}.arrowSign{font-size:25px;background:#fff;color:#7b3277;border:3px solid #ff5ca8;border-radius:12px;padding:3px 8px;font-weight:900}.hurdle{width:58px;height:28px}.hurdle span{position:absolute;bottom:0;width:7px;height:25px;background:#8b4d2e;border-radius:4px}.hurdle span:first-child{left:5px}.hurdle span:nth-child(2){right:5px}.hurdle b{position:absolute;left:0;top:-12px;width:58px;text-align:center;font-size:9px;background:#ffd34d;border:2px solid #fff;border-radius:7px;color:#633b16;padding:1px 0}.arrowSign{position:absolute}
+.girl{position:absolute;width:46px;height:74px;z-index:12;filter:drop-shadow(0 4px 2px #3b1b4f)}
+.girl .hair{position:absolute;left:3px;top:1px;width:40px;height:43px;background:#2b1830;border-radius:50% 50% 43% 43%;z-index:1}
+.girl .hair:before,.girl .hair:after{content:"";position:absolute;top:19px;width:13px;height:39px;background:#2b1830;border-radius:50%}
+.girl .hair:before{left:-5px}.girl .hair:after{right:-5px}
+.girl .head{position:absolute;left:10px;top:7px;width:27px;height:31px;background:#f2b28d;border:2px solid #4b244d;border-radius:48% 48% 45% 45%;z-index:2}
+.girl .head:after{content:"";position:absolute;left:5px;bottom:5px;width:14px;height:5px;border-bottom:2px solid #7b3450;border-radius:50%}
+.girl .eyes{position:absolute;left:6px;top:12px;width:4px;height:5px;background:#25162d;border-radius:50%;box-shadow:10px 0 #25162d}
+.girl .body{position:absolute;left:9px;top:36px;width:29px;height:22px;border:2px solid #48234e;border-radius:8px 8px 5px 5px;background:#ff70b3;z-index:2}
+.girl .arms{position:absolute;left:5px;top:38px;width:36px;height:20px;border-left:4px solid #f2b28d;border-right:4px solid #f2b28d;border-radius:50%;z-index:3}
+.girl .legs{position:absolute;left:12px;top:55px;width:23px;height:19px;border-left:7px solid #29243b;border-right:7px solid #29243b;border-radius:2px;z-index:2}
+.girl .legs:after{content:"";position:absolute;left:-5px;top:14px;width:10px;height:5px;background:#1f172d;border-radius:6px;box-shadow:13px 0 #1f172d}
+.girl.bot .body{background:#8f63ff}
+.girl:before{content:"★";position:absolute;left:-4px;top:4px;font-size:15px;color:#ff4fa5;z-index:6;text-shadow:1px 1px #fff}
+.girl.bot:before{content:"★";color:#a36bff}
+#message{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:50;width:min(720px,92vw);
+background:linear-gradient(135deg,#fff4ff,#ffd5f0);color:#35164b;border:5px solid #ff4fa5;border-radius:28px;
+padding:28px;text-align:center;box-shadow:0 12px 0 #7b3277,0 0 40px #fff;display:none}
+#message h1{margin:0 0 12px;font-size:clamp(30px,6vw,58px);color:#e73591;text-shadow:2px 2px #fff}
+#message p{font-size:18px;line-height:1.45}
+button{border:0;border-radius:15px;padding:13px 20px;margin:6px;font-weight:900;font-size:17px;cursor:pointer;
+background:#ff4fa5;color:#fff;box-shadow:0 5px 0 #9b276f}
+button:hover{transform:translateY(-2px)}
+.choice{background:#fff;color:#562064;border:3px solid #c64cba}
+#controls{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);z-index:30;display:flex;gap:12px;align-items:center;background:#ffffff33;padding:8px 10px;border-radius:24px;backdrop-filter:blur(4px)}
+.ctrl{width:68px;height:68px;padding:0;border-radius:50%;font-size:29px;background:#fff;color:#51205d;box-shadow:0 6px 0 #a04c9b;touch-action:none;user-select:none}.ctrl:active{transform:translateY(4px);box-shadow:0 2px 0 #a04c9b}.ctrl[data-k=" "]{width:82px;height:82px;font-size:34px;background:#ff5ca8;color:#fff}
+#tip{position:absolute;bottom:80px;left:50%;transform:translateX(-50%);z-index:25;background:#54205fdd;padding:7px 12px;border-radius:12px;font-size:14px}
+#count{position:absolute;inset:0;display:none;align-items:center;justify-content:center;z-index:45;font-size:100px;font-weight:900;color:#fff;text-shadow:0 8px #9b2672}
+#progress{position:absolute;top:65px;left:50%;transform:translateX(-50%);z-index:25;width:min(500px,70vw);height:13px;background:#ffffff88;border:2px solid #fff;border-radius:20px;overflow:hidden}
+#bar{height:100%;width:0;background:#ff4fa5}
+
+.big-win{font-size:32px;font-weight:1000;color:#e73591;background:#fff;border:4px solid #ff5ca8;border-radius:20px;padding:12px;margin:12px 0;box-shadow:0 6px 0 #9b276f;text-shadow:1px 1px #ffd2ed}.treasure-big{font-size:70px;margin:8px}.petbtn{font-size:20px;min-width:150px}.finish-platform{box-shadow:0 0 22px #ffd34d,0 5px 0 #6c397e}.summitChest{animation:floatChest 1.4s ease-in-out infinite alternate}@keyframes floatChest{from{transform:translateY(0)}to{transform:translateY(-7px)}}
+</style>
+</head>
+<body>
+<div id="game">
+<div id="stars"></div><div class="cloud c1"></div><div class="cloud c2"></div><div id="mountain"></div>
+<div id="hud"><div class="title">⭐ THE $ISTY $ISTERS ⭐</div><div class="badge">$YLVIYA VS $YDNEY</div></div>
+<div id="progress"><div id="bar"></div></div>
+<div id="course"></div><div id="player" class="girl"><div class="hair"></div><div class="head"><span class="eyes"></span></div><div class="body"></div><div class="arms"></div><div class="legs"></div></div>
+<div id="bot" class="girl bot"><div class="hair"></div><div class="head"><span class="eyes"></span></div><div class="body"></div><div class="arms"></div><div class="legs"></div></div>
+<div id="tip">← → to run • ↑ or big pink button to jump • You can also use A / D / W</div>
+<div id="controls"><button class="ctrl" data-k="ArrowLeft">←</button><button class="ctrl" data-k="ArrowUp">↑</button><button class="ctrl" data-k="ArrowRight">→</button><button class="ctrl" data-k=" ">⤒</button></div>
+<div id="count"></div>
+<div id="message"></div>
+</div>
+<script>
+const course=document.getElementById('course'), p=document.getElementById('player'), b=document.getElementById('bot');
+const msg=document.getElementById('message'), bar=document.getElementById('bar'), count=document.getElementById('count');
+let keys={}, running=false, mode=1, selected='Sydney', p1Name='Sydney', p2Name='Sylvia', px=0,py=0,vx=0,vy=0,bx=0,by=0,bvx=0,bvy=0,cam=0,last=0,jump1=false,jump2=false;
+let plats=[], startY=0, botProgress=0, winnerName='', chest=null;
+const PLATFORM_GAP=70;
+let grace1=0, grace2=0;
+
+function showIntro(){
+ msg.style.display='block';
+ msg.innerHTML=`<h1>⛰️ MOUNT YAEY ⛰️</h1>
+ <p><b>Legend has it...</b> whoever reaches the tippie top wins <b>1 TRILLION DOLLARS</b> and a pet <b>Dolla</b>!<br>Only your great-great-great grandmother has ever completed it.</p>
+ <p><b>Sylvia:</b> “I am going to get that prize!”<br><b>Sydney:</b> “NO WAY! I'm going to win!”</p>
+ <button onclick="choosePlayers()">START THE STORY ▶</button>`;
+}
+function choosePlayers(){
+ msg.innerHTML=`<h1>👯 HOW MANY PLAYERS?</h1><p>Choose how many people will race up Mount YAEY!</p>
+ <button class="choice" onclick="chooseOne()">👤 1 PLAYER</button>
+ <button class="choice" onclick="chooseTwo()">👯 2 PLAYERS</button>`;
+}
+function chooseOne(){
+ mode=1;
+ msg.innerHTML=`<h1>💗 CHOOSE YOUR SISTER</h1><p>You play as one sister and the other sister becomes your racer.</p>
+ <button class="choice" onclick="startGame('Sylvia')">💗 PLAY AS SYLVIA</button>
+ <button class="choice" onclick="startGame('Sydney')">💜 PLAY AS SYDNEY</button>`;
+}
+function chooseTwo(){
+ mode=2;
+ msg.innerHTML=`<h1>👯 PLAYER 1</h1><p>Who is Player 1?</p>
+ <button class="choice" onclick="setP1('Sylvia')">💗 SYLVIA</button>
+ <button class="choice" onclick="setP1('Sydney')">💜 SYDNEY</button>`;
+}
+function setP1(name){
+ p1Name=name; p2Name=name==='Sylvia'?'Sydney':'Sylvia';
+ msg.innerHTML=`<h1>👯 PLAYER 2</h1><p>Player 2 will be <b>${p2Name}</b>.</p>
+ <p><b>Player 1:</b> WASD<br><b>Player 2:</b> Arrow keys</p>
+ <button onclick="startTwoPlayer()">START THE RACE ▶</button>`;
+}
+function startTwoPlayer(){ selected=p1Name; startGame(p1Name); }
+function startGame(name){
+ selected=name; if(mode===1){p1Name=name;p2Name=name==='Sylvia'?'Sydney':'Sylvia';}
+ msg.style.display='none'; makeCourse(); setup(); countdown();
+}
+function makeCourse(){
+ course.innerHTML=''; plats=[]; chest=null;
+ const W=window.innerWidth,H=window.innerHeight;
+ // Hard but fair zig-zag: platforms stay close enough to reach, while the route still changes direction.
+ const centers=[.50,.63,.44,.58,.39,.56,.70,.50,.34,.53,.68,.45,.61,.76,.54,.36,.52,.69,.45,.62,.78,.57,.39,.54,.70,.47,.63,.40,.52];
+ const widths=[205,185,190,180,185,178,182,175,180,172,185,170,180,168,178,170,182,168,178,170,180,168,182,170,185,172,190,180,215];
+ const gap=82;
+ centers.forEach((cx,i)=>{
+   const y=H-120-i*gap;
+   const w=Math.max(145,Math.min(250,W*widths[i]/1000));
+   const x=Math.max(14,Math.min(W-w-14,W*cx-w/2));
+   const e=document.createElement('div');
+   e.className='platform '+(i%4===0?'alt':i%4===1?'blue':'green');
+   e.style.left=x+'px';e.style.top=y+'px';e.style.width=w+'px';e.style.height='22px';
+   if(i===centers.length-1)e.classList.add('finish-platform');
+   course.appendChild(e);plats.push({x,y,w,h:22,el:e});
+
+   // Harder course: no boosts. Hurdles are the main extra obstacle.
+   if(i>1 && i<centers.length-2 && (i%5===2 || i%8===0)){
+     const hurdle=document.createElement('div');
+     hurdle.className='obstacle hurdle'; hurdle.innerHTML='<span></span><span></span><b>JUMP!</b>';
+     hurdle.style.left=(x+w*.58)+'px';hurdle.style.top=(y-28)+'px';
+     hurdle.dataset.platform=i; course.appendChild(hurdle);
+   }
+   if(i%7===0 && i>0 && i<centers.length-1){
+     const sign=document.createElement('div');
+     sign.className='obstacle arrowSign'; sign.textContent='→';
+     sign.style.left=(x+8)+'px';sign.style.top=(y-48)+'px';
+     course.appendChild(sign);
+   }
+ });
+ startY=plats[0].y-PLAYER_H;
+ const top=plats[plats.length-1];
+ chest=document.createElement('div');chest.id='summitChest';chest.innerHTML='💰🧰💰';
+ chest.style.position='absolute';chest.style.left=(top.x+top.w/2-52)+'px';chest.style.top=(top.y-70)+'px';
+ chest.style.fontSize='42px';chest.style.zIndex='20';chest.style.textAlign='center';chest.style.animation='floatChest 1.4s ease-in-out infinite alternate';
+ course.appendChild(chest);
+}
+function setup(){
+ px=plats[0].x+plats[0].w/2-23;py=startY;vx=vy=0;
+ bx=plats[0].x+plats[0].w/2+5;by=startY;bvx=bvy=0;cam=0;botProgress=0;
+ p.style.left=px+'px';p.style.top=py+'px';b.style.left=bx+'px';b.style.top=by+'px';
+ p.style.display='block';b.style.display=mode===1?'block':'block';
+ p.style.background=p1Name==='Sylvia'?'#ff75b9':'#9a70ff';
+ b.style.background=p2Name==='Sylvia'?'#ff75b9':'#9a70ff';
+ document.getElementById('tip').innerHTML=mode===2?'PLAYER 1: WASD • PLAYER 2: ARROW KEYS • W / ↑ = jump':'← → / A D = run • ↑ / W / pink button = jump • No boosts! Jump over hurdles and line up each landing carefully — the course gets harder!';
+}
+function countdown(){
+ count.style.display='flex';let n=3;count.textContent=n;
+ let t=setInterval(()=>{n--;if(n>0)count.textContent=n;else if(n===0)count.textContent='GO!';else{clearInterval(t);count.style.display='none';running=true;startLoop()}},650);
+}
+const PLAYER_W=46, PLAYER_H=74;
+function jumpPower(){return -12.2}
+function horizontalOverlap(x,q){return x+PLAYER_W-4>q.x && x+4<q.x+q.w}
+function standingOn(x,y){
+  const feet=y+PLAYER_H;
+  let best=null;
+  for(const q of plats){
+    if(horizontalOverlap(x,q) && Math.abs(feet-q.y)<=3){
+      if(!best || q.y<best.y) best=q;
+    }
+  }
+  return best;
+}
+// Reliable one-way platform collision. The character can pass upward through a platform,
+// but if their feet cross its top while falling, they are snapped exactly onto the top.
+function resolveLanding(x,oldY,newY,falling){
+  if(!falling || newY<oldY) return null;
+  const oldFeet=oldY+PLAYER_H, newFeet=newY+PLAYER_H;
+  let hit=null;
+  for(const q of plats){
+    if(!horizontalOverlap(x,q)) continue;
+    if(oldFeet<=q.y+2 && newFeet>=q.y){
+      if(!hit || q.y<hit.y) hit=q;
+    }
+  }
+  return hit;
+}
+function getHurdleAt(x,y){
+  const px1=x+5, px2=x+PLAYER_W-5, py1=y+8, py2=y+PLAYER_H-2;
+  for(const o of document.querySelectorAll('.hurdle')){
+    const ox=parseFloat(o.style.left)||0, oy=parseFloat(o.style.top)||0;
+    const ow=58, oh=28;
+    if(px2>ox && px1<ox+ow && py2>oy && py1<oy+oh) return o;
+  }
+  return null;
+}
+function resetChar(which){
+ if(which===1){px=plats[0].x+plats[0].w/2-PLAYER_W/2;py=plats[0].y-PLAYER_H;vx=vy=0}
+ else {bx=plats[0].x+plats[0].w/2-PLAYER_W/2;by=plats[0].y-PLAYER_H;bvx=bvy=0;botProgress=0}
+}
+function moveCharacter(x,y,vx,vy,keysLeft,keysRight,jumpPressed,dt){
+ // Split each frame into small physics steps so a fast fall can NEVER tunnel through a platform.
+ const steps=Math.max(1,Math.ceil(dt/0.35));
+ const stepDt=dt/steps;
+ let grounded=!!standingOn(x,y), landed=false;
+ for(let s=0;s<steps;s++){
+   if(keysLeft)vx-=.42*stepDt;
+   if(keysRight)vx+=.42*stepDt;
+   vx*=Math.pow(.86,stepDt);vx=Math.max(-5.8,Math.min(5.8,vx));
+   if(jumpPressed && grounded){vy=jumpPower();grounded=false;jumpPressed=false}
+
+   const oldY=y;
+   const oldX=x;
+   const wasFalling=vy>=0;
+   const nextY=y+vy*stepDt+.5*.55*stepDt*stepDt;
+   let nextX=x+vx*stepDt;
+   // Hurdles are solid: you must jump over them instead of walking through them.
+   if(getHurdleAt(nextX,nextY)){
+     nextX=oldX; vx=0;
+   }
+   const hit=resolveLanding(nextX,oldY,nextY,wasFalling);
+   if(hit){
+     x=nextX;y=hit.y-PLAYER_H;vy=0;grounded=true;landed=true;
+   }else{
+     x=nextX;y=nextY;vy+=.55*stepDt;grounded=!!standingOn(x,y);
+   }
+ }
+ // Keep the character inside the sides of the game area.
+ x=Math.max(0,Math.min(window.innerWidth-PLAYER_W,x));
+ return {x,y,vx,vy,grounded,landed};
+}
+function syncWorldAfterCamera(dy){
+ // Move BOTH the collision rectangles and their actual DOM platforms together.
+ plats.forEach(q=>{q.y+=dy;q.el.style.top=q.y+'px'});
+ document.querySelectorAll('.obstacle').forEach(o=>o.style.top=((parseFloat(o.style.top)||0)+dy)+'px');
+ if(chest)chest.style.top=((parseFloat(chest.style.top)||0)+dy)+'px';
+}
+let lastFrameTime=performance.now();
+let loopRunning=false;
+function loop(t){
+ if(!running){loopRunning=false;return;}
+ loopRunning=true;
+ lastFrameTime=t;
+ const dt=Math.min((t-last)/16.67,1.25);last=t;
+ const Ht=window.innerHeight;
+
+ const jumpPressed1=!!(keys.KeyW||keys.w||(mode===1&&(keys.ArrowUp))||keys.Space||keys[' ']||jump1);
+ const res1=moveCharacter(px,py,vx,vy,
+   !!(keys.KeyA||keys.a||(mode===1&&keys.ArrowLeft)),
+   !!(keys.KeyD||keys.d||(mode===1&&keys.ArrowRight)),jumpPressed1,dt);
+ px=res1.x;py=res1.y;vx=res1.vx;vy=res1.vy;
+ if(res1.grounded||res1.landed){jump1=false;keys.KeyW=keys.w=keys.ArrowUp=keys.Space=keys[' ']=false}
+
+ if(mode===2){
+   const jumpPressed2=!!(keys.ArrowUp||keys.Slash||keys['/']||jump2);
+   const res2=moveCharacter(bx,by,bvx,bvy,!!keys.ArrowLeft,!!keys.ArrowRight,jumpPressed2,dt);
+   bx=res2.x;by=res2.y;bvx=res2.vx;bvy=res2.vy;
+   if(res2.grounded||res2.landed){jump2=false;keys.ArrowUp=keys.Slash=keys['/']=false}
+ }else{
+   let targetIndex=Math.min(botProgress+1,plats.length-1),target=plats[targetIndex],tcx=target.x+target.w/2;
+   const grounded2=!!standingOn(bx,by);
+   if(bx<tcx-20)bvx+=.20*dt;else if(bx>tcx+20)bvx-=.20*dt;
+   bvx*=Math.pow(.91,dt);bvx=Math.max(-4.0,Math.min(4.0,bvx));
+   if(grounded2 && Math.abs(bx-tcx)<75 && Math.random()<.12)bvy=jumpPower();
+   const res2=moveCharacter(bx,by,bvx,bvy,false,false,false,dt);
+   bx=res2.x;by=res2.y;bvx=res2.vx;bvy=res2.vy;
+   if(res2.landed && targetIndex>botProgress)botProgress=targetIndex;
+ }
+
+
+ if(py>Ht+100){resetChar(1);if(mode===1){flash('💫 YOU FELL! 💫','Back to the start — try the next jump again!');return}}
+ if(by>Ht+100)resetChar(2);
+
+ // Scroll only after the player reaches the upper third. DOM platforms and collision data move together.
+ const high=Math.min(py,by);
+ if(high<Ht*.34){
+   const dy=Ht*.34-high;
+   py+=dy;by+=dy;syncWorldAfterCamera(dy);cam+=dy;
+ }
+
+ const top=plats[plats.length-1];
+ if(standingOn(px,py)===top){finish(p1Name);return}
+ if(standingOn(bx,by)===top){finish(p2Name);return}
+ p.style.left=px+'px';p.style.top=py+'px';
+ b.style.left=bx+'px';b.style.top=by+'px';
+ bar.style.width=Math.min(100,Math.max(0,(cam/(plats.length*PLATFORM_GAP))*100))+'%';
+ requestAnimationFrame(loop);
+}
+function startLoop(){
+ if(!running)return;
+ last=performance.now();
+ lastFrameTime=last;
+ if(!loopRunning) requestAnimationFrame(loop);
+}
+setInterval(()=>{
+ if(!running)return;
+ const now=performance.now();
+ if(now-lastFrameTime>1000){
+   loopRunning=false;
+   last=now;
+   lastFrameTime=now;
+   requestAnimationFrame(loop);
+ }
+},250);
+window.addEventListener('focus',()=>{if(running)startLoop();});
+function H(){return window.innerHeight}
+function flash(title,text){
+ running=false;msg.style.display='block';msg.innerHTML=`<h1>${title}</h1><p>${text}</p><button onclick="msg.style.display='none';running=true;startLoop()">TRY AGAIN ▶</button>`;
+}
+function finish(winner){
+ running=false;winnerName=winner;bar.style.width='100%';
+ // Put a visible treasure chest on the summit.
+ const top=plats[plats.length-1];
+ const old=document.getElementById('summitChest');if(old)old.remove();
+ chest=document.createElement('div');chest.id='summitChest';chest.innerHTML='🧰';chest.style.position='absolute';chest.style.left=(top.x+top.w/2-30)+'px';chest.style.top=(top.y-72)+'px';chest.style.fontSize='58px';chest.style.zIndex='20';course.appendChild(chest);
+ msg.style.display='block';
+ msg.innerHTML=`<h1>🏆 YOU WON! 🏆</h1><h2>${winner} MADE IT TO THE TOP!</h2>
+ <p>You completed the legendary Mount YAEY obstacle course!</p>
+ <div class="big-win">🎉 YOU WON! 🎉</div>
+ <p><b>Choose your prize pet from the treasure chest:</b></p>
+ <button class="choice petbtn" onclick="choosePet('cat')">🐱 PET CAT</button>
+ <button class="choice petbtn" onclick="choosePet('dog')">🐶 PET DOG</button>
+ <button class="choice petbtn" onclick="choosePet('goldfish')">🐠 PET GOLDFISH</button>`;
+}
+function choosePet(pet){
+ const info=pet==='cat'?['CAT','🐱','Dolla']:pet==='dog'?['DOG','🐶','Dolla']:['GOLDFISH','🐠','Goldie'];
+ msg.innerHTML=`<h1>🎉 YOU WON! 🎉</h1><h2>${info[2]} IS YOUR NEW ${info[0]}! ${info[1]}</h2>
+ <p>Your prize chest is waiting at the tippie top of Mount YAEY.</p><div class="treasure-big">🧰</div>
+ <button onclick="openPrize('${pet}')">OPEN THE TREASURE CHEST 💰</button>`;
+}
+function openPrize(pet){
+ const info=pet==='cat'?['CAT','🐱','Dolla']:pet==='dog'?['DOG','🐶','Dolla']:['GOLDFISH','🐠','Goldie'];
+ msg.innerHTML=`<h1>💰 1 TRILLION DOLLARS! 💰</h1>
+ <div class="treasure-big">💰🧰💰</div>
+ <p>You got <b>1 TRILLION DOLLARS</b> and ${info[2]}, your new ${info[0]}! ${info[1]}</p>
+ <p>Your treasure chest reward is complete! You can now have a ${info[0].toLowerCase()} as your prize pet.</p>
+ <p>You are officially the next Sisty sister to conquer Mount YAEY!</p><h2>THE END 🎉</h2>
+ <button onclick="location.reload()">PLAY AGAIN 🔄</button>`;
+}
+window.addEventListener('keydown',e=>{
+ const k=e.code; keys[k]=true; keys[e.key]=true;
+ if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space'].includes(k)||e.key===' ')e.preventDefault();
+});
+window.addEventListener('keyup',e=>{keys[e.code]=false;keys[e.key]=false});
+window.addEventListener('blur',()=>{keys={};jump1=false;jump2=false});
+document.querySelectorAll('.ctrl').forEach(btn=>{
+ const k=btn.dataset.k;
+ btn.addEventListener('pointerdown',e=>{e.preventDefault();if(k===' '){jump1=true}else keys[k]=true});
+ btn.addEventListener('pointerup',()=>{keys[k]=false});btn.addEventListener('pointerleave',()=>{keys[k]=false});btn.addEventListener('pointercancel',()=>{keys[k]=false});
+});
+showIntro();
+
+</script>
+</body>
+</html>
